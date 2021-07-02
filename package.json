@@ -20,5 +20,11 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "author": "Meinte Boersma <meinte.boersma@gmail.com>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dslmeinte/certlogic-fiddle.git"
+  }
 }
