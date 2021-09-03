@@ -2,7 +2,7 @@ import React from "react"
 import {useState} from "react"
 import ReactDOM from "react-dom"
 import {evaluate} from "certlogic-js"
-import {validateFormat} from "certlogic-validation"
+import {validateFormat} from "certlogic-js/dist/validation"
 
 import "./styling.css"
 

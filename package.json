@@ -1,12 +1,10 @@
 {
   "name": "certlogic-fiddle",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
-    "certlogic-js": "^0.7.7",
-    "certlogic-validation": "^0.7.7",
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1",
+    "certlogic-js": "^0.9.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-scripts": "2.1.1"
   },
   "scripts": {
