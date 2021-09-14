@@ -1,8 +1,9 @@
 import React from "react"
 import {useState} from "react"
 import ReactDOM from "react-dom"
-import {evaluate} from "certlogic-js"
-import {validateFormat} from "certlogic-js/dist/validation"
+import {evaluate, version} from "certlogic-js"
+import {dataAccessesWithContext, validateFormat} from "certlogic-js/dist/validation"
+import {CompactExprRendering} from "certlogic-html"
 
 import "./styling.css"
 
@@ -59,6 +60,9 @@ const App = () => {
             In the text input boxes below you can enter JSON text representing a CertLogic logical expression, as well as input data.
             The expression is validated and evaluated live with the given data.
         </p>
+        <p>
+            CertLogic version: {version}
+        </p>
         <div className="wrapper">
             <div>
                 <span className="label">CertLogic expression</span>
@@ -80,6 +84,14 @@ const App = () => {
                     <span className="label">Evaluation result</span>
                 </div>
                 {typeof evaluation === "string" ? <p>{evaluation}</p> : <pre>{pretty(evaluation)}</pre>}
+            </div>
+            <div>
+                <span className="label">Expression in compact notation</span>
+                <CompactExprRendering expr={expr} />
+            </div>
+            <div>
+                <span className="label">Data accesses</span>
+                <pre>{pretty(dataAccessesWithContext(expr))}</pre>
             </div>
         </div>
         <p>
