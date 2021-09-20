@@ -39,18 +39,19 @@ const App = () => {
     const [dataAsText, setDataAsText] = useState(pretty({}))
 
     const expr = tryParse(exprAsText)
-    const validation = (expr instanceof Error)
-        ? `Could not parse expression text as JSON: ${expr.message}.`
-        : validateFormat(expr)
-    const exprHasValidationErrors = Array.isArray(validation) && validation.length > 0
+    const exprIsJson = !(expr instanceof Error)
+    const validationErrors = exprIsJson
+        ? validateFormat(expr)
+        : [ { expr, message: `Could not parse expression text as JSON: ${expr.message}.` } ]
+    const exprIsValid = validationErrors.length === 0
 
     const data = tryParse(dataAsText)
     const evaluation = (data instanceof Error)
         ? `Could not parse data text as JSON: ${data.message}.`
         : (
-            expr instanceof Error || exprHasValidationErrors
-                ? `(Did not run evaluation due to earlier problems.)`
-                : evaluateSafe(expr, data)
+            exprIsValid
+                ? evaluateSafe(expr, data)
+                : `(Did not run evaluation because expression is not valid.)`
         )
 
     return <main>
@@ -68,10 +69,9 @@ const App = () => {
             </div>
             <div>
                 <span className="label">Validation errors</span>
-                {Array.isArray(validation)
-                    ? (validation.length === 0) ? <p>(None.)</p> : <ol>{validation.map((error, index) => <li key={index}>{error.message}</li>)}</ol>
-                    : <p>{validation}</p>
-                }
+                {validationErrors.length === 0 && <p>(None.)</p>}
+                {validationErrors.length === 1 && <p>{validationErrors[0].message}</p>}
+                {validationErrors.length > 1 && <ol>{validationErrors.map((error, index) => <li key={index}>{error.message}</li>)}</ol>}
             </div>
             <div>
                 <span className="label">Data</span>
@@ -83,14 +83,18 @@ const App = () => {
                 </div>
                 {typeof evaluation === "string" ? <p>{evaluation}</p> : <pre>{pretty(evaluation)}</pre>}
             </div>
-            <div>
-                <span className="label">Data accesses</span>
-                <pre>{pretty(dataAccessesWithContext(expr))}</pre>
-            </div>
-            <div>
-                <span className="label">Expression in compact notation</span>
-                <CompactExprRendering expr={expr} />
-            </div>
+            {exprIsValid &&
+                <div>
+                    <span className="label">Data accesses</span>
+                    <pre>{pretty(dataAccessesWithContext(expr))}</pre>
+                </div>
+            }
+            {exprIsValid &&
+                <div>
+                    <span className="label">Expression in compact notation</span>
+                    <CompactExprRendering expr={expr} />
+                </div>
+            }
         </div>
         <p>
             CertLogic JS implementation version: <span className="strong">{implementationVersion}</span> (NPM package <a href="https://www.npmjs.com/package/certlogic-js" target="_blank"><tt>certlogic-js</tt></a>)<br/>
