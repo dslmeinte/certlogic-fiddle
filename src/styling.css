@@ -46,3 +46,7 @@ p {
     width: 80%;
 }
 
+span.strong {
+    font-weight: bold;
+}
+

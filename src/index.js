@@ -1,7 +1,7 @@
 import React from "react"
 import {useState} from "react"
 import ReactDOM from "react-dom"
-import {evaluate, version} from "certlogic-js"
+import {evaluate, implementationVersion, specificationVersion} from "certlogic-js"
 import {dataAccessesWithContext, validateFormat} from "certlogic-js/dist/validation"
 import {CompactExprRendering} from "certlogic-html"
 
@@ -59,9 +59,7 @@ const App = () => {
             In this playground you can fiddle around with <a href="https://github.com/ehn-dcc-development/dgc-business-rules/blob/main/certlogic/README.md">CertLogic</a>.
             In the text input boxes below you can enter JSON text representing a CertLogic logical expression, as well as input data.
             The expression is validated and evaluated live with the given data.
-        </p>
-        <p>
-            CertLogic version: {version}
+            Also, all possible data accesses are computed, and a compact notation of the expression is shown.
         </p>
         <div className="wrapper">
             <div>
@@ -86,14 +84,18 @@ const App = () => {
                 {typeof evaluation === "string" ? <p>{evaluation}</p> : <pre>{pretty(evaluation)}</pre>}
             </div>
             <div>
-                <span className="label">Expression in compact notation</span>
-                <CompactExprRendering expr={expr} />
-            </div>
-            <div>
                 <span className="label">Data accesses</span>
                 <pre>{pretty(dataAccessesWithContext(expr))}</pre>
             </div>
+            <div>
+                <span className="label">Expression in compact notation</span>
+                <CompactExprRendering expr={expr} />
+            </div>
         </div>
+        <p>
+            CertLogic JS implementation version: <span className="strong">{implementationVersion}</span> (NPM package <a href="https://www.npmjs.com/package/certlogic-js" target="_blank"><tt>certlogic-js</tt></a>)<br/>
+            CertLogic specification version: <span className="strong">{specificationVersion}</span>
+        </p>
         <p>
             CertLogic has been developed by the <a href="https://ec.europa.eu/health/ehealth/policy/network_en">European Health Network</a> (eHN), as part of the <a href="https://ec.europa.eu/info/live-work-travel-eu/coronavirus-response/safe-covid-19-vaccines-europeans/eu-digital-covid-certificate_en">EU Digital COVID Certificate effort</a>.
         </p>
