@@ -6,6 +6,7 @@ import {dataAccessesWithContext, validateFormat} from "certlogic-js/dist/validat
 import {CompactExprRendering} from "certlogic-html"
 
 import "./styling.css"
+import "certlogic-html/dist/styling.css"
 
 
 const pretty = (json) => JSON.stringify(json, null, 2)
@@ -92,7 +93,9 @@ const App = () => {
             {exprIsValid &&
                 <div>
                     <span className="label">Expression in compact notation</span>
-                    <CompactExprRendering expr={expr} />
+                    <div>
+                        <CompactExprRendering expr={expr} />
+                    </div>
                 </div>
             }
         </div>
