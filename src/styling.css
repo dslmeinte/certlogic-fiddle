@@ -50,3 +50,25 @@ span.strong {
     font-weight: bold;
 }
 
+.push-right {
+    margin-left: 1em;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.fade-out {
+    animation-name: fadeOut;
+    animation-duration: 2s;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+

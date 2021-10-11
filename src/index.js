@@ -36,8 +36,10 @@ const ReactiveTextArea = ({ id, value, setter }) =>
 
 
 const App = () => {
-    const [exprAsText, setExprAsText] = useState(pretty({ var: "" }))
-    const [dataAsText, setDataAsText] = useState(pretty({}))
+    const params = new URLSearchParams(window.location.search)
+
+    const [exprAsText, setExprAsText] = useState(params.get("expr") || pretty({ var: "" }))
+    const [dataAsText, setDataAsText] = useState(params.get("data") || pretty({}))
 
     const expr = tryParse(exprAsText)
     const exprIsJson = !(expr instanceof Error)
@@ -54,6 +56,16 @@ const App = () => {
                 ? evaluateSafe(expr, data)
                 : `(Did not run evaluation because expression is not valid.)`
         )
+
+    const [beenShared, setBeenShared] = useState(false)
+
+    const copySharableUrlToClipboard = async () => {
+        const url = new URLSearchParams()
+        url.append("expr", exprAsText)
+        url.append("data", dataAsText)
+        await navigator.clipboard.writeText(`${window.location}?${url}`)
+        setBeenShared(true)
+    }
 
     return <main>
         <h1>CertLogic Fiddle</h1>
@@ -84,6 +96,14 @@ const App = () => {
                 </div>
                 {typeof evaluation === "string" ? <p>{evaluation}</p> : <pre>{pretty(evaluation)}</pre>}
             </div>
+            <div>
+                <button onClick={copySharableUrlToClipboard}>Copy sharable URL to clipboard</button>
+                <span
+                    className={"push-right " + (beenShared ? "fade-out" : "hidden")}
+                    onAnimationEnd={() => { setBeenShared(false) }}
+                >Copied!</span>
+            </div>
+            <div></div>
             {exprIsValid &&
                 <div>
                     <span className="label">Data accesses</span>
