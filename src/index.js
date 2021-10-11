@@ -59,7 +59,7 @@ const App = () => {
 
     const [beenShared, setBeenShared] = useState(false)
 
-    const copySharableUrlToClipboard = async () => {
+    const copyShareableUrlToClipboard = async () => {
         const url = new URLSearchParams()
         url.append("expr", exprAsText)
         url.append("data", dataAsText)
@@ -97,7 +97,7 @@ const App = () => {
                 {typeof evaluation === "string" ? <p>{evaluation}</p> : <pre>{pretty(evaluation)}</pre>}
             </div>
             <div>
-                <button onClick={copySharableUrlToClipboard}>Copy sharable URL to clipboard</button>
+                <button onClick={copyShareableUrlToClipboard}>Copy shareable URL to clipboard</button>
                 <span
                     className={"push-right " + (beenShared ? "fade-out" : "hidden")}
                     onAnimationEnd={() => { setBeenShared(false) }}
