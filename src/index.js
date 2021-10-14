@@ -36,7 +36,7 @@ const ReactiveTextArea = ({ id, value, setter }) =>
 
 
 const App = () => {
-    const params = new URLSearchParams(window.location.search)
+    const params = new URLSearchParams(location.search)
 
     const [exprAsText, setExprAsText] = useState(params.get("expr") || pretty({ var: "" }))
     const [dataAsText, setDataAsText] = useState(params.get("data") || pretty({}))
@@ -60,10 +60,10 @@ const App = () => {
     const [beenShared, setBeenShared] = useState(false)
 
     const copyShareableUrlToClipboard = async () => {
-        const url = new URLSearchParams()
-        url.append("expr", exprAsText)
-        url.append("data", dataAsText)
-        await navigator.clipboard.writeText(`${window.location}?${url}`)
+        const params = new URLSearchParams()
+        params.append("expr", exprAsText)
+        params.append("data", dataAsText)
+        await navigator.clipboard.writeText(`${location.origin}/?${params}`)
         setBeenShared(true)
     }
 
