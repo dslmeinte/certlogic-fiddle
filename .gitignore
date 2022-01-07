@@ -28,8 +28,6 @@ yarn-error.log*
 .env.build
 .vercel
 
-/package-lock.json
-/yarn.lock
-
+# IntelliJ/IDEA:
 /.idea
 

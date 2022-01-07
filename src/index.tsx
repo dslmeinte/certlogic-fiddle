@@ -1,34 +1,17 @@
 import React from "react"
 import {useState} from "react"
 import ReactDOM from "react-dom"
-import {evaluate, implementationVersion, specificationVersion} from "certlogic-js"
+import {implementationVersion, specificationVersion} from "certlogic-js"
 import {dataAccessesWithContext, validateFormat} from "certlogic-js/dist/validation"
 import {CompactExprRendering} from "certlogic-html"
 
 import "./styling.css"
 import "certlogic-html/dist/styling.css"
 
-
-const pretty = (json) => JSON.stringify(json, null, 2)
-
-const tryParse = (text) => {
-    try {
-        return JSON.parse(text)
-    } catch (e) {
-        return e
-    }
-}
-
-const evaluateSafe = (expr, data) => {
-    try {
-        return evaluate(expr, data)
-    } catch (e) {
-        return `Error occurred during evaluation: ${e.message}.`
-    }
-}
+import {evaluateSafe, pretty, tryParse} from "./json-utils"
 
 
-const ReactiveTextArea = ({ id, value, setter }) =>
+const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, setter: (newValue: string) => void }) =>
     <textarea
         id={id}
         onChange={(event) => setter(event.target.value)}
@@ -103,7 +86,7 @@ const App = () => {
                     onAnimationEnd={() => { setBeenShared(false) }}
                 >Copied!</span>
             </div>
-            <div></div>
+            <div>{/* required for grid layout */}</div>
             {exprIsValid &&
                 <div>
                     <span className="label">Data accesses</span>
@@ -120,7 +103,7 @@ const App = () => {
             }
         </div>
         <p>
-            CertLogic JS implementation version: <span className="strong">{implementationVersion}</span> (NPM package <a href="https://www.npmjs.com/package/certlogic-js" target="_blank"><tt>certlogic-js</tt></a>)<br/>
+            CertLogic JS implementation version: <span className="strong">{implementationVersion}</span> (NPM package <a href="https://www.npmjs.com/package/certlogic-js" target="_blank"><span className="tt">certlogic-js</span></a>)<br/>
             CertLogic specification version: <span className="strong">{specificationVersion}</span>
         </p>
         <p>
