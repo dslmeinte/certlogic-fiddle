@@ -1,6 +1,7 @@
 import {CertLogicExpression, evaluate} from "certlogic-js"
 
-export const pretty = (json: any) => JSON.stringify(json, null, 2)
+export const pretty = (json: any) =>
+    JSON.stringify(json, null, 2)
 
 export const tryParse = (text: string) => {
     try {

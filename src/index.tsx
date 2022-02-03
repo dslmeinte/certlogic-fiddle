@@ -11,6 +11,9 @@ import "certlogic-html/dist/styling.css"
 import {evaluateSafe, pretty, tryParse} from "./json-utils"
 
 
+const ownVersion = require("../package.json").version
+
+
 const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, setter: (newValue: string) => void }) =>
     <textarea
         id={id}
@@ -104,7 +107,8 @@ const App = () => {
         </div>
         <p>
             CertLogic JS implementation version: <span className="strong">{implementationVersion}</span> (NPM package <a href="https://www.npmjs.com/package/certlogic-js" target="_blank"><span className="tt">certlogic-js</span></a>)<br/>
-            CertLogic specification version: <span className="strong">{specificationVersion}</span>
+            CertLogic specification version: <span className="strong">{specificationVersion}</span><br/>
+            Version of this playground: <span className="strong">{ownVersion}</span> (<a href="https://github.com/dslmeinte/certlogic-fiddle" target="_blank">GitHub repo</a>)
         </p>
         <p>
             CertLogic has been developed by the <a href="https://ec.europa.eu/health/ehealth/policy/network_en">European Health Network</a> (eHN), as part of the <a href="https://ec.europa.eu/info/live-work-travel-eu/coronavirus-response/safe-covid-19-vaccines-europeans/eu-digital-covid-certificate_en">EU Digital COVID Certificate effort</a>.
@@ -113,5 +117,5 @@ const App = () => {
 }
 
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById("root"))
 
