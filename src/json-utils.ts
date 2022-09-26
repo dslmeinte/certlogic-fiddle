@@ -19,3 +19,9 @@ export const evaluateSafe = (expr: CertLogicExpression, data: any) => {
     }
 }
 
+export const minify = (text: string) =>
+    JSON.stringify(JSON.parse(text))
+
+export const parseOrNull = (text: string | null) =>
+    text === null ? null : JSON.parse(text)
+

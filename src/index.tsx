@@ -2,13 +2,19 @@ import React from "react"
 import {useState} from "react"
 import ReactDOM from "react-dom"
 import {implementationVersion, specificationVersion} from "certlogic-js"
-import {dataAccessesWithContext, validateFormat} from "certlogic-js/dist/validation"
+import {validateFormat} from "certlogic-js/dist/validation"
 import {CompactExprRendering} from "certlogic-html"
 
 import "./styling.css"
 import "certlogic-html/dist/styling.css"
 
-import {evaluateSafe, pretty, tryParse} from "./json-utils"
+import {
+    evaluateSafe,
+    minify,
+    parseOrNull,
+    pretty,
+    tryParse
+} from "./json-utils"
 
 
 const ownVersion = require("../package.json").version
@@ -24,8 +30,9 @@ const ReactiveTextArea = ({ id, value, setter }: { id: string, value: string, se
 const App = () => {
     const params = new URLSearchParams(location.search)
 
-    const [exprAsText, setExprAsText] = useState(params.get("expr") || pretty({ var: "" }))
-    const [dataAsText, setDataAsText] = useState(params.get("data") || pretty({}))
+    console.log(params.get("expr"))
+    const [exprAsText, setExprAsText] = useState(pretty(parseOrNull(params.get("expr")) || ({ var: "" })))
+    const [dataAsText, setDataAsText] = useState(pretty(parseOrNull(params.get("data")) || ({})))
 
     const expr = tryParse(exprAsText)
     const exprIsJson = !(expr instanceof Error)
@@ -47,8 +54,8 @@ const App = () => {
 
     const copyShareableUrlToClipboard = async () => {
         const params = new URLSearchParams()
-        params.append("expr", exprAsText)
-        params.append("data", dataAsText)
+        params.append("expr", minify(exprAsText))
+        params.append("data", minify(dataAsText))
         await navigator.clipboard.writeText(`${location.origin}/?${params}`)
         setBeenShared(true)
     }
@@ -72,6 +79,17 @@ const App = () => {
                 {validationErrors.length === 1 && <p>{validationErrors[0].message}</p>}
                 {validationErrors.length > 1 && <ol>{validationErrors.map((error, index) => <li key={index}>{error.message}</li>)}</ol>}
             </div>
+            {exprIsValid &&
+                <>
+                    <div>
+                        <span className="label">Expression in compact notation</span>
+                        <div>
+                            <CompactExprRendering expr={expr} />
+                        </div>
+                    </div>
+                    <div></div>
+                </>
+            }
             <div>
                 <span className="label">Data</span>
                 <ReactiveTextArea id="data" value={dataAsText} setter={setDataAsText} />
@@ -89,25 +107,10 @@ const App = () => {
                     onAnimationEnd={() => { setBeenShared(false) }}
                 >Copied!</span>
             </div>
-            <div>{/* required for grid layout */}</div>
-            {exprIsValid &&
-                <div>
-                    <span className="label">Data accesses</span>
-                    <pre>{pretty(dataAccessesWithContext(expr))}</pre>
-                </div>
-            }
-            {exprIsValid &&
-                <div>
-                    <span className="label">Expression in compact notation</span>
-                    <div>
-                        <CompactExprRendering expr={expr} />
-                    </div>
-                </div>
-            }
         </div>
         <p>
-            CertLogic JS implementation version: <span className="strong">{implementationVersion}</span> (NPM package <a href="https://www.npmjs.com/package/certlogic-js" target="_blank"><span className="tt">certlogic-js</span></a>)<br/>
-            CertLogic specification version: <span className="strong">{specificationVersion}</span><br/>
+            <a href="https://github.com/ehn-dcc-development/eu-dcc-business-rules/tree/main/certlogic/certlogic-js" target="_blank">CertLogic JS implementation</a> version: <span className="strong">{implementationVersion}</span> (NPM package <a href="https://www.npmjs.com/package/certlogic-js" target="_blank"><span className="tt">certlogic-js</span></a>)<br/>
+            <a href="https://github.com/ehn-dcc-development/eu-dcc-business-rules/tree/main/certlogic/specification" target="_blank">CertLogic specification</a> version: <span className="strong">{specificationVersion}</span><br/>
             Version of this playground: <span className="strong">{ownVersion}</span> (<a href="https://github.com/dslmeinte/certlogic-fiddle" target="_blank">GitHub repo</a>)
         </p>
         <p>
