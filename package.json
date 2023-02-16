@@ -1,6 +1,6 @@
 {
   "name": "certlogic-fiddle",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "scripts": {
     "dev": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
