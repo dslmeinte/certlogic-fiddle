@@ -1,6 +1,5 @@
-import React from "react"
-import {useState} from "react"
-import ReactDOM from "react-dom"
+import React, {useState} from "react"
+import {createRoot} from "react-dom/client"
 import {implementationVersion, specificationVersion} from "certlogic-js"
 import {validateFormat} from "certlogic-js/dist/validation"
 import {CompactExprRendering} from "certlogic-html"
@@ -119,6 +118,10 @@ const App = () => {
     </main>
 }
 
-
-ReactDOM.render(<App />, document.getElementById("root"))
+const idRootElement = "root"
+const rootElement = document.getElementById(idRootElement)
+if (!rootElement) {
+    throw new Error(`no element with id="${idRootElement}"`)
+}
+createRoot(rootElement).render(<App />)
 
